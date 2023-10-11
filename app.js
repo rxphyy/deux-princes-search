@@ -12,7 +12,6 @@ const __dirname = path.dirname(__filename);
 
 const ytDlpPath = path.join(__dirname, '/yt-dlp');
 
-const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
 
