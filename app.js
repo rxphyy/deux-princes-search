@@ -3,7 +3,6 @@ import { saveItemToCollection, searchSubtitles, isVideoInCollection } from './db
 import express from 'express';
 import { exec } from 'child_process';
 import path from 'path';
-import cors from 'cors';
 import axios from 'axios';
 import fs from 'fs';
 
@@ -11,6 +10,7 @@ const __filename = new URL(import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
 
 const ytDlpPath = path.join(__dirname, '/yt-dlp');
+
 
 const app = express();
 const port = process.env.PORT || 3001;
