@@ -5,6 +5,7 @@ import { exec } from 'child_process';
 import path from 'path';
 import axios from 'axios';
 import fs from 'fs';
+import cors from 'cors';
 
 import https from 'https';
 import ytdl from 'ytdl-core';
@@ -18,6 +19,8 @@ const ytDlpPath = path.join(__dirname, '/yt-dlp');
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+app.use(cors());
 
 const server = app.listen(port, () => console.log(`App is listening on port ${port}!`));
 
