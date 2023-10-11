@@ -110,7 +110,7 @@ app.get('/api/updateCaptionsDbRecords', async (req, res) => {
 
       await Promise.all(playlistVideos.map(async (video) => {
         if (!(await isVideoInCollection(video.videoId, 'subtitles'))) {
-          await axios.get(`http://localhost:3001/api/fetchVideoInfoAndSubs?video=${video.videoId}`);
+          await axios.get(`http://testtest-5uol.onrender.com/api/fetchVideoInfoAndSubs?video=${video.videoId}`);
         }
       }));
 
