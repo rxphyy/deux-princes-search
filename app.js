@@ -35,7 +35,6 @@ app.get('/api/testYtdlCore', async (req, res) => {
   try {
     const info = await ytdl.getInfo(videoURL);
     const title = info.videoDetails.title;
-    console.log(info.videoDetails.thumbnails);
     const thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length-1].url;
 
     const format = 'xml';
