@@ -1,5 +1,6 @@
 {
   "name": "express-hello-world",
+  "type": "module",
   "version": "1.0.0",
   "description": "Express Hello World on Render",
   "main": "app.js",
