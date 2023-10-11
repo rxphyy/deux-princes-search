@@ -57,4 +57,38 @@ const removeSubtitleDoubles = (subtitles) => {
 }
 
 
-export { filterAndFormatSubtitles };
+const parseXMLSubtitles = async (xmlData) => {
+  const data = decodeHTMLEntities(xmlData);
+  const subtitleRegex = /<text start="([\d.]+)" dur="([\d.]+)">([^<]+)<\/text>/g;
+  const subtitles = [];
+  
+  let match;
+  while ((match = subtitleRegex.exec(data))) {
+    const startTime = parseFloat(match[1]);
+    const text = match[3];
+    
+    subtitles.push({ startTime, text });
+  }
+
+  return subtitles;
+};
+
+function decodeHTMLEntities(text) {
+  const entities = [
+    ['&amp;', '&'],
+    ['&quot;', '"'],
+    ['&#39;', "'"],
+    ['&lt;', '<'],
+    ['&gt;', '>'],
+  ];
+
+  for (const [entity, char] of entities) {
+    const entityRegExp = new RegExp(entity, 'g');
+    text = text.replace(entityRegExp, char);
+  }
+
+  return text;
+}
+
+
+export { filterAndFormatSubtitles, parseXMLSubtitles };

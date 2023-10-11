@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import { config } from 'dotenv';
 config({ path: '../.env' });
-const uri = process.env.MONGODB_CONNECTION_STRING;
+const uri = "mongodb+srv://admin:8BOYJeQ9SrX26lG9@deuxprinces.oze4hgl.mongodb.net/?retryWrites=true&w=majority";
 
 const initializeDbClient = async () => {
   // Create a MongoClient with a MongoClientOptions object to set the Stable API version

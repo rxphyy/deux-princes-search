@@ -1,10 +1,14 @@
-import { filterAndFormatSubtitles } from './subsFormatter.js';
+import { parseXMLSubtitles, filterAndFormatSubtitles } from './subsFormatter.js';
 import { saveItemToCollection, searchSubtitles, isVideoInCollection } from './dbManager.js';
 import express from 'express';
 import { exec } from 'child_process';
 import path from 'path';
 import axios from 'axios';
 import fs from 'fs';
+
+import https from 'https';
+import ytdl from 'ytdl-core';
+
 
 const __filename = new URL(import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
@@ -20,6 +24,64 @@ const server = app.listen(port, () => console.log(`App is listening on port ${po
 app.get('/api/check', async (req, res) => {
   res.send(`Seems to be working fine 😉`)
 });
+
+app.get('/api/testYtdlCore', async (req, res) => {
+  const videoId = req.query.video;
+  const videoURL = `https://www.youtube.com/watch?v=${videoId}`;
+
+  try {
+    const info = await ytdl.getInfo(videoURL);
+    const title = info.videoDetails.title;
+    const thumbnailUrl = info.videoDetails.thumbnails[0].url;
+
+    const format = 'xml';
+
+    console.log(`Fetching data for episode '${title}'...`);
+
+    const subtitles = info.player_response.captions.playerCaptionsTracklistRenderer.captionTracks
+
+    if (subtitles && subtitles.length) {
+      const track = subtitles.find(t => t.languageCode === 'fr');
+      if (track) {
+        console.log('Retrieving captions:', track.name.simpleText);
+        
+        const output = path.resolve(__dirname, `${info.videoDetails.videoId}.${track.languageCode}.${format}`).substring(3);
+        
+        console.log('Saving to', output);
+        https.get(`${track.baseUrl}&fmt=${format !== 'xml' ? format : ''}`, async res => {
+          let vttData = '';
+
+          res.on('data', chunk => {
+            vttData += chunk;
+          });
+
+          res.on('end', async () => {
+            const subs = await parseXMLSubtitles(vttData);
+            const output = ({
+              videoId: videoId,
+              videoTitle: title,
+              thumbnailUrl: thumbnailUrl,
+              captions: subs
+            });
+
+            await saveItemToCollection('subtitles', output)
+          });
+        })
+      } else {
+        console.log('Could not find captions for', lang);
+      }
+    } else {
+      console.log('No captions found for this video');
+    }
+
+    console.log(`Added '${title}' to the database.`);
+    res.json(`Added '${title}' to the database.`);
+  } catch (error) {
+    console.error('Error fetching video info and subtitles:', error);
+    res.status(500).json({ error: 'Error fetching video info and subtitles' });
+  }
+});
+
 
 app.get('/api/fetchVideoInfoAndSubs', async (req, res) => {
   var videoId = req.query.video;
@@ -97,7 +159,7 @@ app.get('/api/updateCaptionsDbRecords', async (req, res) => {
           part: 'snippet',
           maxResults: 100,
           playlistId: playlistId,
-          key: apiKey,
+          key: 'AIzaSyAVkfl2nT8yhlACQQJWqElHTm_hVvurbDg',
           pageToken: nextPageToken
         },
       });
@@ -110,7 +172,7 @@ app.get('/api/updateCaptionsDbRecords', async (req, res) => {
 
       await Promise.all(playlistVideos.map(async (video) => {
         if (!(await isVideoInCollection(video.videoId, 'subtitles'))) {
-          await axios.get(`http://testtest-5uol.onrender.com/api/fetchVideoInfoAndSubs?video=${video.videoId}`);
+          await axios.get(`http://testtest-5uol.onrender.com/api/testYtdlCore?video=${video.videoId}`);
         }
       }));
 
