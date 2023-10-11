@@ -24,7 +24,7 @@ app.get('/api/check', async (req, res) => {
 app.get('/api/fetchVideoInfoAndSubs', async (req, res) => {
   var videoId = req.query.video;
 
-  const command = `dir && cd .. && dir && cd ${ytDlpPath.substring(1)} \
+  const command = `cd yt-dlp} \
     && yt-dlp --skip-download --get-title --get-id --get-thumbnail --encoding utf-8 --extractor-args "youtube:lang=fr" https://youtube.com/watch?v=${videoId} \
     && yt-dlp --skip-download --write-auto-subs --sub-format best --convert-subs srt --sub-lang fr -o "${videoId}" https://youtube.com/watch?v=${videoId} \
     && rm -f ${ytDlpPath}/*.vtt`;
