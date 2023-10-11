@@ -64,9 +64,7 @@ const parseXMLSubtitles = async (xmlData) => {
   
   let match;
   while ((match = subtitleRegex.exec(data))) {
-    const minutes = Math.floor(match[1] / 60);
-    const remainingSeconds = (match[1] % 60).toFixed(1);
-    const startTime = `${minutes}:${remainingSeconds.toString().padStart(4, '0')}`;
+    const startTime = new Date(match[1] * 1000).toISOString().substring(11, 8);
     const text = match[3];
     
     subtitles.push({ startTime, text });
