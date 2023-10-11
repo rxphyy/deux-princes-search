@@ -59,3 +59,7 @@ const html = `
   </body>
 </html>
 `
+
+app.get('/api/check', async (req, res) => {
+  res.json(`It's a new day`)
+});
