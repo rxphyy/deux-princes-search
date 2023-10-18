@@ -39,4 +39,42 @@ async function isVideoInCollection(videoId, collection) {
   return !!video; // Returns true if the video is found in the collection
 }
 
-export { initializeDbClient, saveItemToCollection, isVideoInCollection };
+const searchSubtitles = async (query) => {
+  try {
+    await client.connect();
+    const database = client.db('deuxPrinces');
+    const subtitlesCollection = database.collection('subtitles');
+
+    const cursor = subtitlesCollection.aggregate([
+      {
+        $match: {
+          'captions.text': { $regex: query, $options: 'i' }, // Case-insensitive search
+        },
+      },
+      {
+        $addFields: {
+          captions: {
+            $filter: {
+              input: '$captions',
+              as: 'caption',
+              cond: {
+                $regexMatch: {
+                  input: '$$caption.text',
+                  regex: query,
+                  options: 'i', // Case-insensitive search
+                },
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    const results = await cursor.toArray();
+    return results;
+  } finally {
+    client.close();
+  }
+};
+
+export { initializeDbClient, saveItemToCollection, isVideoInCollection, searchSubtitles };
