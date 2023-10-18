@@ -27,6 +27,17 @@ app.get('/api/check', async (req, res) => {
   res.send(`Seems to be working fine 😉`)
 });
 
+app.get('/api/fetchMatchingCaptions', async (req, res) => {
+  var search = req.query.search;
+  searchSubtitles(search)
+    .then((result) => {
+      res.json(result)
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+});
+
 app.get('/api/createNewDbRecord', async (req, res) => {
   const videoId = req.query.video;
   const videoURL = `https://www.youtube.com/watch?v=${videoId}`;
