@@ -77,4 +77,4 @@ const searchSubtitles = async (query) => {
   }
 };
 
-export { initializeDbClient, saveItemToCollection, isVideoInCollection, searchSubtitles };
+export { initializeDbClient, saveItemToCollection, isVideoInCollection };
