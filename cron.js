@@ -1,20 +1,39 @@
 import cron from 'cron';
 import https from 'https';
 
-const backendUrl = 'https://testtest-5uol.onrender.com/api/check';
+const serverRefreshUrl = process.env.SRV_REFRESH_URL;
+const dbRefreshUrl = process.env.DB_UPDATE_URL;
 
-const job = new cron.CronJob('*/14 * * * *', function () {
-    console.log('Refreshing the server');
+const serverRefreshJob = new cron.CronJob('*/14 * * * *', function () {
+    const timestamp = new Date().toISOString();
+    console.log(timestamp, 'Refreshing the server');
 
-    https.get(backendUrl, (res) => {
+    https.get(serverRefreshUrl, (res) => {
         if (res.statusCode == 200) {
-            console.log('Server refreshed.');
+            console.log(timestamp, 'Server refreshed.');
         } else {
-            console.error('Failed to refresh server', res.statusCode);
+            console.error(timestamp, 'Failed to refresh server', res.statusCode);
         }
     }).on('error', (err) => {
-        console.error('Error during refresh', err.message);
+        console.error(timestamp, 'Error during server refresh', err.message);
     })
 })
 
-export { job } 
+
+const databaseRefreshJob = new cron.CronJob('*/30 * * * *', function () {
+    const timestamp = new Date().toISOString();
+    console.log(timestamp, 'Calling database update');
+
+    https.get(dbRefreshUrl, (res) => {
+        if (res.statusCode == 200) {
+            console.log(timestamp, 'Database refreshed.');
+        } else {
+            console.error(timestamp, 'Failed to refresh database', res.statusCode);
+        }
+    }).on('error', (err) => {
+        console.error(timestamp, 'Error during database refresh', err.message);
+    })
+})
+
+
+export { serverRefreshJob, databaseRefreshJob } 

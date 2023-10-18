@@ -1,15 +1,15 @@
-# README
+# Recherche dans les épisodes de Deux Princes
 
-This is the [Express](https://expressjs.com) [Hello world](https://expressjs.com/en/starter/hello-world.html) example on [Render](https://render.com).
+J'ai fait cette application pour permettre aux auditeurs du podcast [*Deux Princes*](https://www.patreon.com/thomaslevac) de Thomas Levac et Philippe-Audrey Larrue Saint-Jacques de chercher parmi les épisodes pour trouver des segments par texte.
 
-The app in this repo is deployed at [https://express.onrender.com](https://express.onrender.com).
+L'application prends un recherche de l'utilisateur et appelle l'[API *Data V3* de YouTube](https://developers.google.com/youtube/v3/docs) pour fouiller tous les sous-titres des épisodes afin de trouver les segments qui y correspondent.
 
-## Deployment
+J'ai créé ceci pour mettre fin aux conversations avec mon frère où on se rappelait des meilleurs moments du podcast, mais qu'il nous était tout le temps impossible de retrouver l'épisode en particulier.
 
-See https://render.com/docs/deploy-node-express-app or follow the steps below:
+J'ai été inspiré par [un service](https://tmgstudios.tv/pages/search) sur le site du podcast [*Tiny Meat Gang*](https://tmgstudios.tv/) qui offre la même fonctionnalité.
 
-Create a new web service with the following values:
-  * Build Command: `yarn`
-  * Start Command: `node app.js`
+#
 
-That's it! Your web service will be live on your Render URL as soon as the build finishes.
+#### Fait en React par Raphaël Marier
+*raphmarier@gmail.com*
+#
