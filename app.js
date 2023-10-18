@@ -6,9 +6,12 @@ import path from 'path';
 import axios from 'axios';
 import fs from 'fs';
 import cors from 'cors';
+import { job } from './cron.js';
 
 import https from 'https';
 import ytdl from 'ytdl-core';
+
+job.start();
 
 
 const __filename = new URL(import.meta.url).pathname;
