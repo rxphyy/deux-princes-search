@@ -1,4 +1,4 @@
-import { parseXMLSubtitles, searchSubtitles } from './subsFormatter.js';
+import { parseXMLSubtitles } from './subsFormatter.js';
 import { saveItemToCollection, isVideoInCollection, searchSubtitles } from './dbManager.js';
 import express from 'express';
 import path from 'path';
