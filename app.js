@@ -122,11 +122,11 @@ app.get('/api/updateCaptionsDbRecords', async (req, res) => {
         videoTitle: item.snippet.title,
       }));
 
-      await Promise.all(playlistVideos.map(async (video) => {
+      for (const video of playlistVideos) {
         if (!(await isVideoInCollection(video.videoId, 'subtitles'))) {
           await axios.get(process.env.CREATE_NEW_RECORD_URL + `?video=${video.videoId}`);
         }
-      }));
+      }
 
       // Set the nextPageToken for the next iteration
       nextPageToken = data.nextPageToken;
