@@ -1,7 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
+import 'dotenv/config'
 const uri = process.env.MONGODB_CONNECTION_STRING;
 
-let client = null;
 
 const initializeDbClient = async () => {
   // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -25,28 +25,33 @@ const initializeDbClient = async () => {
   }
 }
 
+
 const collectionExists = async (dbName, collectionName) => {
-  await initializeDbClient();
+  const client = new MongoClient(uri);
+  await client.connect();
   const collections = await client.db(dbName).listCollections({ name: collectionName }).toArray();
   return collections.length > 0;
 };
 
 async function saveItemToCollection(collectionName, item) {
-  await initializeDbClient();
+  const client = new MongoClient(uri);
+  await client.connect();
   return await client.db("deuxPrinces").collection(collectionName).insertOne(item);
 }
 
 
 // Function to check if a video is already in the subtitles collection
 async function isVideoInCollection(videoId, collection) {
-  await initializeDbClient();
+  const client = new MongoClient(uri);
+  await client.connect();
   const video = await client.db('deuxPrinces').collection(collection).findOne({ videoId });
   return !!video; // Returns true if the video is found in the collection
 }
 
 const searchSubtitles = async (query) => {
   try {
-    const client = await initializeDbClient();
+    const client = new MongoClient(uri);
+    await client.connect();
     const database = client.db('deuxPrinces');
     const subtitlesCollection = database.collection('subtitles');
 
@@ -77,8 +82,7 @@ const searchSubtitles = async (query) => {
 
     const results = await cursor.toArray();
     return results;
-  } finally {
-    client.close();
+  } catch {
   }
 };
 

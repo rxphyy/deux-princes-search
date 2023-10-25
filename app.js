@@ -8,6 +8,7 @@ import { serverRefreshJob, databaseRefreshJob } from './cron.js';
 
 import https from 'https';
 import ytdl from 'ytdl-core';
+import 'dotenv/config'
 
 serverRefreshJob.start();
 databaseRefreshJob.start();

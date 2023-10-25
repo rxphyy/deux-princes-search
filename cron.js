@@ -1,5 +1,6 @@
 import cron from 'cron';
 import https from 'https';
+import 'dotenv/config'
 
 const serverRefreshUrl = process.env.SRV_REFRESH_URL;
 const dbRefreshUrl = process.env.DB_UPDATE_URL;
