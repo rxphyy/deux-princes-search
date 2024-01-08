@@ -18,7 +18,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "https": "^1.0.0",
-    "mongodb": "^6.1.0",
+    "mongodb": "^6.3.0",
     "node-webvtt": "^1.9.4",
     "srt-parser-2": "^1.2.3",
     "vtt-to-srt": "^0.1.0",

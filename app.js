@@ -22,7 +22,7 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 
-const server = app.listen(port, () => console.log(`App is listening on port ${port}!`));
+const server = app.listen(port, () => console.log(new Date().toISOString(), `App is listening on port ${port}.`));
 
 app.get('/api/check', async (req, res) => {
   res.send(`Seems to be working fine 😉`)
@@ -47,6 +47,7 @@ app.get('/api/createNewDbRecord', async (req, res) => {
     const info = await ytdl.getInfo(videoURL);
     const title = info.videoDetails.title;
     const thumbnailUrl = info.videoDetails.thumbnails[info.videoDetails.thumbnails.length-1].url;
+    const pubDate = info.videoDetails.publishDate;
 
     const format = 'xml';
 
@@ -74,6 +75,7 @@ app.get('/api/createNewDbRecord', async (req, res) => {
             const output = ({
               videoId: videoId,
               videoTitle: title,
+              publishDate: pubDate,
               thumbnailUrl: thumbnailUrl,
               captions: subs
             });
@@ -120,7 +122,7 @@ app.get('/api/updateCaptionsDbRecords', async (req, res) => {
       const data = response.data;
       const playlistVideos = data.items.map(item => ({
         videoId: item.snippet.resourceId.videoId,
-        videoTitle: item.snippet.title,
+        videoTitle: item.snippet.title
       }));
 
       for (const video of playlistVideos) {
